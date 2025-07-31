@@ -7,7 +7,7 @@
  "field_order": [
   "title",
   "username",
-  "api_token",
+  "bot_token",
   "column_break_4",
   "mark_as_default",
   "section_break_4",
@@ -26,10 +26,9 @@
    "unique": 1
   },
   {
-   "fieldname": "api_token",
-   "fieldtype": "Password",
-   "in_list_view": 1,
-   "label": "API Token",
+   "fieldname": "bot_token",
+   "fieldtype": "Data",
+   "label": "Bot Token",
    "reqd": 1
   },
   {
@@ -64,12 +63,7 @@
    "fieldtype": "Data",
    "label": "NGINX Path"
   },
-  {
-   "fieldname": "mark_as_default",
-   "fieldtype": "Button",
-   "label": "Mark as Default",
-   "options": "mark_as_default"
-  },
+
   {
    "fieldname": "column_break_4",
    "fieldtype": "Column Break"
