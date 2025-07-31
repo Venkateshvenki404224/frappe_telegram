@@ -10,7 +10,23 @@
   "content",
   "column_break_3",
   "from_user",
-  "from_bot"
+  "from_bot",
+  "section_break_status",
+  "status",
+  "queued_at",
+  "processing_at",
+  "sent_at",
+  "failed_at",
+  "retry_count",
+  "next_retry_at",
+  "column_break_message_details",
+  "message_type",
+  "chat_id",
+  "parse_mode",
+  "reply_to_message_id",
+  "disable_web_page_preview",
+  "disable_notification",
+  "protect_content"
  ],
  "fields": [
   {
@@ -54,6 +70,109 @@
    "label": "Message ID",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_status",
+   "fieldtype": "Section Break",
+   "label": "Message Status"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Queued\nProcessing\nSent\nFailed",
+   "default": "Queued",
+   "in_list_view": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "queued_at",
+   "fieldtype": "Datetime",
+   "label": "Queued At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "processing_at",
+   "fieldtype": "Datetime",
+   "label": "Processing At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sent_at",
+   "fieldtype": "Datetime",
+   "label": "Sent At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "failed_at",
+   "fieldtype": "Datetime",
+   "label": "Failed At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "retry_count",
+   "fieldtype": "Int",
+   "label": "Retry Count",
+   "default": 0,
+   "read_only": 1
+  },
+  {
+   "fieldname": "next_retry_at",
+   "fieldtype": "Datetime",
+   "label": "Next Retry At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_message_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "message_type",
+   "fieldtype": "Select",
+   "label": "Message Type",
+   "options": "text\nphoto\ndocument\nvideo\naudio\nvoice",
+   "default": "text",
+   "read_only": 1
+  },
+  {
+   "fieldname": "chat_id",
+   "fieldtype": "Data",
+   "label": "Chat ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "parse_mode",
+   "fieldtype": "Select",
+   "label": "Parse Mode",
+   "options": "HTML\nMarkdown",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reply_to_message_id",
+   "fieldtype": "Data",
+   "label": "Reply To Message ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "disable_web_page_preview",
+   "fieldtype": "Check",
+   "label": "Disable Web Page Preview",
+   "default": 0,
+   "read_only": 1
+  },
+  {
+   "fieldname": "disable_notification",
+   "fieldtype": "Check",
+   "label": "Disable Notification",
+   "default": 0,
+   "read_only": 1
+  },
+  {
+   "fieldname": "protect_content",
+   "fieldtype": "Check",
+   "label": "Protect Content",
+   "default": 0,
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,

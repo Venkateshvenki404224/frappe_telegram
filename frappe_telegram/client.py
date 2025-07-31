@@ -15,7 +15,9 @@ bot interactions via Hooks / Controller methods
 """
 
 
-def send_message(message_text: str, parse_mode=None, user=None, telegram_user=None, from_bot=None):
+def send_message(message_text: str, parse_mode=None, user=None, telegram_user=None, from_bot=None, 
+                chat_id=None, reply_to_message_id=None, disable_web_page_preview=False, 
+                disable_notification=False, protect_content=False, use_queue=True):
     """
     Send a message using a bot to a Telegram User
 
@@ -29,17 +31,55 @@ def send_message(message_text: str, parse_mode=None, user=None, telegram_user=No
         Selects the Telegram User to send the message to. Can be skipped if `user` is set
     from_bot: `str`
         Explicitly specify a bot name to send message from; the default is used if none specified
+    chat_id: `str`
+        Direct chat ID to send message to (alternative to user/telegram_user)
+    reply_to_message_id: `str`
+        ID of the message to reply to
+    disable_web_page_preview: `bool`
+        Disable web page preview for links in the message
+    disable_notification: `bool`
+        Send message silently
+    protect_content: `bool`
+        Protect the content from forwarding and saving
+    use_queue: `bool`
+        Whether to use the message queue system (default: True)
     """
 
     message_text = sanitize_message_text(message_text, parse_mode)
 
-    telegram_user_id = get_telegram_user_id(user=user, telegram_user=telegram_user)
+    # Determine chat_id
+    if chat_id:
+        target_chat_id = chat_id
+    else:
+        target_chat_id = get_telegram_user_id(user=user, telegram_user=telegram_user)
+    
     if not from_bot:
         from_bot = frappe.db.get_default(DEFAULT_TELEGRAM_BOT_KEY)
 
-    bot = get_bot(from_bot)
-    message = bot.send_message(telegram_user_id, text=message_text, parse_mode=parse_mode)
-    log_outgoing_message(telegram_bot=from_bot, result=message)
+    # Prepare message data
+    message_data = {
+        "text": message_text,
+        "chat_id": target_chat_id,
+        "parse_mode": parse_mode,
+        "reply_to_message_id": reply_to_message_id,
+        "disable_web_page_preview": disable_web_page_preview,
+        "disable_notification": disable_notification,
+        "protect_content": protect_content,
+        "type": "text"
+    }
+
+    if use_queue:
+        # Use message queue system
+        from frappe_telegram.utils.message_queue import message_queue
+        message_id = message_queue.enqueue_message(message_data, from_bot)
+        frappe.msgprint(_(f"Message queued for sending. Message ID: {message_id}"))
+        return message_id
+    else:
+        # Direct sending (legacy mode)
+        bot = get_bot(from_bot)
+        message = bot.send_message(target_chat_id, text=message_text, parse_mode=parse_mode)
+        log_outgoing_message(telegram_bot=from_bot, result=message)
+        return message.message_id
 
 
 def send_file(file, filename=None, message=None, parse_mode=None, user=None, telegram_user=None,

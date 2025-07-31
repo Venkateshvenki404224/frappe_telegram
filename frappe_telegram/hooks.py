@@ -37,6 +37,27 @@ telegram_update_pre_processors = [
     "frappe_telegram.handlers.logging.handler",
 ]
 
+# Command handlers for Telegram bot
+telegram_command_handlers = {
+    "/start": "frappe_telegram.commands.builtin.start_command",
+    "/help": "frappe_telegram.commands.builtin.help_command",
+    "/status": "frappe_telegram.commands.builtin.status_command",
+}
+
+# Callback query handlers
+telegram_callback_handlers = {
+    "help": "frappe_telegram.commands.builtin.help_callback",
+    "status": "frappe_telegram.commands.builtin.status_callback",
+}
+
+# Message queue configuration
+telegram_queue_config = {
+    "max_retries": 3,
+    "retry_delay": 300,
+    "queue_name": "telegram_messages",
+    "timeout": 300
+}
+
 # Includes in <head>
 # ------------------
 

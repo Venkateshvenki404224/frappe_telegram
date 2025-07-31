@@ -9,12 +9,17 @@
   "username",
   "bot_token",
   "column_break_4",
+  "environment",
+  "is_active",
   "mark_as_default",
   "section_break_4",
   "webhook_url",
   "webhook_port",
   "column_break_7",
-  "webhook_nginx_path"
+  "webhook_nginx_path",
+  "section_break_webhook_management",
+  "webhook_status",
+  "webhook_actions"
  ],
  "fields": [
   {
@@ -67,6 +72,47 @@
   {
    "fieldname": "column_break_4",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "environment",
+   "fieldtype": "Select",
+   "label": "Environment",
+   "options": "Development\nProduction",
+   "default": "Development",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active",
+   "description": "Only one bot per environment can be active",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "mark_as_default",
+   "fieldtype": "Check",
+   "label": "Mark as Default",
+   "description": "Use this bot as default for sending messages"
+  },
+  {
+   "fieldname": "section_break_webhook_management",
+   "fieldtype": "Section Break",
+   "label": "Webhook Management"
+  },
+  {
+   "fieldname": "webhook_status",
+   "fieldtype": "Data",
+   "label": "Webhook Status",
+   "read_only": 1,
+   "description": "Current webhook registration status"
+  },
+  {
+   "fieldname": "webhook_actions",
+   "fieldtype": "HTML",
+   "label": "Webhook Actions",
+   "read_only": 1,
+   "description": "Webhook management buttons"
   }
  ],
  "index_web_pages_for_search": 1,
