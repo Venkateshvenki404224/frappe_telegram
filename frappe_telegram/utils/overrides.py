@@ -1,36 +1,24 @@
 import frappe
-from telegram.ext import Dispatcher, ExtBot, Updater
+from telegram.ext import Application, Bot
 from frappe_telegram.handlers.logging import log_outgoing_message
 
 
 """
 For each incoming Update, we will have frappe initialized.
-We will override Dispatcher and Bot instance
-- Dispatcher is overridden for initializing frappe for each incoming Update
-- Bot is overridden for loggign outgoing messages
-NOTE:
-    Class attributes that starts with __ is Mangled
+We will override Application and Bot instance
+- Application is overridden for initializing frappe for each incoming Update
+- Bot is overridden for logging outgoing messages
 """
 
 
-class FrappeTelegramExtBot(ExtBot):
+class FrappeTelegramBot(Bot):
 
     # The name of the active FrappeTelegramBot
     telegram_bot: str
 
     @classmethod
-    def make(cls, telegram_bot: str, updater: Updater):
-        bot = updater.bot
-        new_bot = cls(
-            bot.token,
-            bot.base_url,
-            request=updater._request,
-            defaults=bot.defaults,
-            arbitrary_callback_data=bot.arbitrary_callback_data,
-        )
-        new_bot.base_url = bot.base_url
-        new_bot.base_file_url = bot.base_file_url
-        new_bot.private_key = bot.private_key
+    def make(cls, telegram_bot: str, token: str):
+        new_bot = cls(token)
         new_bot.telegram_bot = telegram_bot
         return new_bot
 
@@ -40,31 +28,18 @@ class FrappeTelegramExtBot(ExtBot):
         return result
 
 
-class FrappeTelegramDispatcher(Dispatcher):
+class FrappeTelegramApplication(Application):
 
     # The Frappe Site
     site: str
 
     @classmethod
-    def make(cls, site, updater):
-        dispatcher = updater.dispatcher
-        return cls(
-            site,
-            updater.bot,
-            updater.update_queue,
-            job_queue=updater.job_queue,
-            workers=dispatcher.workers,
-            # Class attributes that starts with __ is Mangled
-            exception_event=updater._Updater__exception_event,
-            persistence=dispatcher.persistence,
-            use_context=dispatcher.use_context,
-            context_types=dispatcher.context_types,
-        )
-
-    def __init__(self, site, *args, **kwargs):
-        self.site = site
-        print("Using Patched Frappe Telegram Dispatcher ✅")
-        return super().__init__(*args, **kwargs)
+    def make(cls, site: str, telegram_bot: str, token: str):
+        bot = FrappeTelegramBot.make(telegram_bot=telegram_bot, token=token)
+        application = cls.builder().token(token).bot(bot).build()
+        application.site = site
+        print("Using Patched Frappe Telegram Application ✅")
+        return application
 
     def process_update(self, update: object) -> None:
         try:

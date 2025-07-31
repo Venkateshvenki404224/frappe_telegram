@@ -49,9 +49,9 @@ class TelegramBot(Document):
         if not self.is_new() and not self.has_value_changed("api_token"):
             return
 
-        from telegram.ext import ExtBot
+        from telegram import Bot
         try:
-            bot = ExtBot(
+            bot = Bot(
                 token=self.api_token
             )
             user = bot.get_me()

@@ -102,10 +102,10 @@ def get_telegram_user_id(user=None, telegram_user=None):
 
 
 def get_bot(telegram_bot) -> Bot:
-    from telegram.ext import ExtBot
+    from telegram import Bot
     telegram_bot = frappe.get_doc("Telegram Bot", telegram_bot)
 
-    return ExtBot(
+    return Bot(
         token=telegram_bot.get_password("api_token")
     )
 
